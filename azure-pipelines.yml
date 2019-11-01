@@ -79,13 +79,13 @@ stages:
               namespace: $(k8sNamespace)
               manifests: $(System.ArtifactsDirectory)/manifests/*
               containers: '$(acrEndpoint)/$(imageName):$(tag)'
-          # - task: Bash@3
-          #   inputs:
-          #     targetType: 'inline'
-          #     script: |
-          #       # Write your commands here
-          #       ipaddress="$(kubectl get service $(imageName) -o jsonpath="{.status.loadBalancer.ingress[*].ip}")"
-          #       echo $ipaddress
+          - task: Bash@3
+            inputs:
+              targetType: 'inline'
+              script: |
+                # Write your commands here
+                ipaddress="$(kubectl get service $(imageName) -o jsonpath="{.status.loadBalancer.ingress[*].ip}")"
+                echo $ipaddress
           - task: KubernetesManifest@0
             displayName: Create secret for OrderCapture Service
             inputs:
@@ -93,4 +93,4 @@ stages:
               secretName: ordercaptureservice
               secretType: generic
               namespace: $(k8sNamespace)
-              secretArguments: --from-literal=ip=$(kubectl get service $(imageName) -o jsonpath="{.status.loadBalancer.ingress[*].ip}")
+              secretArguments: --from-literal=ip=$(ipaddress)
