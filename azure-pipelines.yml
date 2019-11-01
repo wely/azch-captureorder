@@ -81,7 +81,7 @@ stages:
             displayName: Create secret for OrderCapture Service
             inputs:
               action: createSecret
-              secretName: orderCaptureService
+              secretName: ordercaptureservice
               secretType: generic
               namespace: $(k8sNamespace)
               secretArguments: --from-literal=ip="$(kubectl get service $(imageName) -o jsonpath="{.status.loadBalancer.ingress[*].ip}")"
