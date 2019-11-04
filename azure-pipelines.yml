@@ -84,8 +84,16 @@ stages:
               targetType: 'inline'
               script: |
                 # Write your commands here
-                ipaddress="$(kubectl get service $(imageName) -o jsonpath="{.status.loadBalancer.ingress[*].ip}")"
-                echo $ipaddress
+                ipaddress=$(kubectl get service captureorder -o jsonpath="{.status.loadBalancer.ingress[*].ip}")
+                echo "ip of the service " $ipaddress
+          - task: Kubernetes@1
+            inputs:
+              connectionType: 'Kubernetes Service Connection'
+              command: 'get'
+              namespace: $(k8sNamespace)
+              arguments: 'service captureorder -o jsonpath="{.status.loadBalancer.ingress[*].ip}"'
+              secretType: 'dockerRegistry'
+              containerRegistryType: 'Azure Container Registry'
           - task: KubernetesManifest@0
             displayName: Create secret for OrderCapture Service
             inputs:
