@@ -84,6 +84,8 @@ stages:
               targetType: 'inline'
               script: |
                 # Write your commands here
+                kubectl config view
+                az aks get-credentials --resource-group aksworkshop --nam aksworkshopwely
                 ipaddress=$(kubectl get service captureorder -o jsonpath="{.status.loadBalancer.ingress[*].ip}")
                 echo "ip of the service " $ipaddress
           - task: Kubernetes@1
