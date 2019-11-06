@@ -84,6 +84,7 @@ stages:
               targetType: 'inline'
               script: |
                 # Write your commands here
+                az login --service-principal --username dad4c335-7a15-4667-869c-312cd54455e1 --password _i:c3Kfy1?/P4hVZy22CyNRlQ1tuH-3R --tenant 72f988bf-86f1-41af-91ab-2d7cd011db47
                 kubectl config view
                 az aks get-credentials --resource-group aksworkshop --nam aksworkshopwely
                 ipaddress=$(kubectl get service captureorder -o jsonpath="{.status.loadBalancer.ingress[*].ip}")
