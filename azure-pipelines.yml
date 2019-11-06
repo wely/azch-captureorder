@@ -5,9 +5,6 @@ variables:
   - name: dockerRegistryServiceConnection
     value: 'containerRegistryConnection' # make sure it matches the name you used in the service connection
   
-  - name: acrEndpoint
-    value: 'aksworkshopwelyacr.azurecr.io' # replace with container registry endpoint
-
   - name: tag
     value: '$(Build.BuildId)'
   - name: imageName
@@ -84,7 +81,7 @@ stages:
               targetType: 'inline'
               script: |
                 # Write your commands here
-                az login --service-principal --username dad4c335-7a15-4667-869c-312cd54455e1 --password _i:c3Kfy1?/P4hVZy22CyNRlQ1tuH-3R --tenant 72f988bf-86f1-41af-91ab-2d7cd011db47
+                az login --service-principal --username $(servicePrincipleUsername) --password $(servicePrinciplePassword) --tenant $(servicePrincipleTenantId)
                 kubectl config view
                 az aks get-credentials --resource-group aksworkshop --nam aksworkshopwely
                 ipaddress=$(kubectl get service captureorder -o jsonpath="{.status.loadBalancer.ingress[*].ip}")
