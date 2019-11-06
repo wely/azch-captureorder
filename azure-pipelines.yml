@@ -86,6 +86,7 @@ stages:
                 az aks get-credentials --resource-group aksworkshop --nam aksworkshopwely
                 ipaddress=$(kubectl get service captureorder -o jsonpath="{.status.loadBalancer.ingress[*].ip}")
                 echo "ip of the service " $ipaddress
+                echo '##vso[task.setvariable variable=captureorder_service_ip;]$ipaddress'
           - task: Kubernetes@1
             inputs:
               connectionType: 'Kubernetes Service Connection'
@@ -94,11 +95,11 @@ stages:
               arguments: 'service captureorder -o jsonpath="{.status.loadBalancer.ingress[*].ip}"'
               secretType: 'dockerRegistry'
               containerRegistryType: 'Azure Container Registry'
-          - task: KubernetesManifest@0
-            displayName: Create secret for OrderCapture Service
-            inputs:
-              action: createSecret
-              secretName: ordercaptureservice
-              secretType: generic
-              namespace: $(k8sNamespace)
-              secretArguments: --from-literal=ip=$(ipaddress)
+          # - task: KubernetesManifest@0
+          #   displayName: Create secret for OrderCapture Service
+          #   inputs:
+          #     action: createSecret
+          #     secretName: ordercaptureservice
+          #     secretType: generic
+          #     namespace: $(k8sNamespace)
+          #     secretArguments: --from-literal=ip=$(ipaddress)
